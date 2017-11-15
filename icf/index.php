@@ -34,6 +34,5 @@ class index
         }
         //路由加载
         route::analyze();
-
     }
 }

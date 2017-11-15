@@ -15,4 +15,7 @@ class index {
     public function index() {
         echo 'test';
     }
+    public function debug($test='hello'){
+        echo $test;
+    }
 }
