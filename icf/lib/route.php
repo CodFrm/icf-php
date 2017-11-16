@@ -11,8 +11,7 @@
 namespace lib;
 
 
-class route
-{
+class route {
     static $model = '';//模块
     static $ctrl = '';//控制器
     static $action = '';//操作
@@ -20,9 +19,9 @@ class route
     static $rule = ['*' =>
         [
             '{s}.php' => '${1}->index->index',
-            '{s}/{s}/{s}' => '${1}->${2}->${3}',
+            '{s}/{s}/{s}#p' => '${1}->${2}->${3}',
             'debug/{test}' => 'index->debug',
-            '{s}/{c}' => '${1}->${2}',
+            '{s}/{s}#p' => '${1}->${2}',
             '{s}' => '${1}->index'
         ],
         'get' => []];
@@ -35,28 +34,35 @@ class route
 
     static $get = [];
 
-    static function matchRule($match, $pathInfo)
-    {
-
+    static function matchRule($match, $pathInfo) {
         //处理各个参数
+        $param = '';
+        if ($cut = strpos($match[0], '#')) {
+            $param = substr($match[0], $cut+1);
+            $match[0]=substr($match[0],0,$cut);
+            if (strpos($param,'p')!==false){
+                $match[0]=$match[0].'/';
+            }
+        }
         $var = preg_replace_callback('#{(.*?)}#', function ($v) {
             static $count = 0;
             $count++;
-            self::$get[$v[1]] = $count;
+            self::$get_param[$count] = $v[1];
             return '([\S][^\{^\}]*)';
         }, $match[0]);
+        self::$replace_param=$match[1];
+        self::$get=[];
         preg_replace_callback('#\/' . $var . '#', function ($v) {
-            foreach (self::$get as $key => $value) {
-                if (isset($v[$value])) {
-                    self::$get[$key] = $v[$value];
-                } else {
-                    unset(self::$get[$key]);
+            foreach ($v as $key=>$value){
+                self::$replace_param=str_replace('${'.$key.'}',$value,self::$replace_param);
+                if(isset(self::$get_param[$key])){
+                    self::$get[self::$get_param[$key]]=$value;
                 }
             }
             return '';
         }, $pathInfo);
-        $tmp = preg_replace('#\/' . $var . '#', $match[1], $pathInfo);
-        $mca = explode('->', $tmp);
+
+        $mca = explode('->', self::$replace_param);
         if (sizeof($mca) == 1) {
             self::$model = _get(_config('model_key'), __DEFAULT_MODEL_);
             self::$ctrl = _get(_config('ctrl_key'), 'index');
@@ -82,8 +88,7 @@ class route
      * @access public
      * @author Farmer
      */
-    static function analyze()
-    {
+    static function analyze() {
         if (isset($_SERVER['PATH_INFO'])) {
             $pathInfo = $_SERVER['PATH_INFO'];
             $tmpRule = self::$rule[strtolower($_SERVER['REQUEST_METHOD'])];
@@ -122,8 +127,7 @@ class route
     }
 
 
-    static function runAction()
-    {
+    static function runAction() {
         try {
             $tmp = self::$classNamePace;
             $object = new $tmp();
@@ -173,8 +177,7 @@ class route
      * @param $rule
      * @param string $to
      */
-    static function add($req_type, $rule, $to = '')
-    {
+    static function add($req_type, $rule, $to = '') {
         if (is_array($rule)) {
             foreach ($rule as $pattern => $value) {
                 self::$rule [$req_type][$pattern] = $value;
