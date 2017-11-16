@@ -49,10 +49,10 @@ function _config($key) {
  * @return null
  */
 function _get($key, $default = false) {
-    return _readValue($_GET,$key,$default);
+    return _readValue($_GET, $key, $default);
 }
 
-function _readValue($data,$key,$default=false){
+function _readValue($data, $key, $default = false) {
     if (isset($data[$key])) {
         return $data[$key];
     }
@@ -71,10 +71,38 @@ function json($str) {
     header("Cache-Control: no-cache, must-revalidate");
     header("Pragma: no-cache");
     header('Content-Type: application/json; charset=utf-8');
-    return json_encode ( $str, JSON_UNESCAPED_UNICODE );
+    return json_encode($str, JSON_UNESCAPED_UNICODE);
 }
 
 
-function _404(){
+function _404() {
     echo '404';
+}
+
+/**
+ * 获取变量
+ *
+ * @author Farmer
+ * @param string $var
+ * @return mixed
+ */
+function input($var,$val=null) {
+    $arrVar = explode('.', $var);
+    if (sizeof($arrVar) <= 1) {
+        $ret = _global($var,$val);
+    } else {
+        $ret = _global($arrVar [0],$val);
+        unset ($arrVar [0]);
+        foreach ($arrVar as $value) {
+            if (!isset ($ret [$value])) {
+                return false;
+            }
+            $ret = $ret [$value];
+        }
+    }
+    return $ret;
+}
+
+function view(){
+    return new \icf\lib\view();
 }

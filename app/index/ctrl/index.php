@@ -11,6 +11,8 @@
 namespace app\index\ctrl;
 
 
+use icf\lib\view;
+
 class index {
     public function index() {
         echo 'test';
@@ -18,5 +20,11 @@ class index {
 
     public function debug($test = 'hello') {
         echo $test;
+    }
+
+    public function template(){
+        $v=new view();
+        $v->assign('test',['ce'=>'emm','c3'=>'ha']);
+        $v->display();
     }
 }

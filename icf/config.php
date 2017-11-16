@@ -9,10 +9,13 @@
  */
 
 return [
-    'debug'=>true,
+    'debug' => true,
 
     //模块,控制器,操作 默认关键字
-    'model_key'=>'m',
-    'ctrl_key'=>'c',
-    'action_key'=>'a',
+    'model_key' => 'm',
+    'ctrl_key' => 'c',
+    'action_key' => 'a',
+    'route' => ['*' => ['debug/{test}' => 'index->debug']],
+    'tpl_suffix'=>'html',
+    'public'=>'public'
 ];

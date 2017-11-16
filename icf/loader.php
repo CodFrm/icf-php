@@ -13,18 +13,16 @@
 //注册自动装载
 spl_autoload_register('loader::loadClass');
 
-class loader
-{
+class loader {
     //路径映射
-    static $path = ['lib'=>'icf\\lib'];
+    static $path = ['lib' => 'icf\\lib'];
 
     /**
      * 加载类
      * @param $className
      * @return bool
      */
-    static function loadClass($className)
-    {
+    static function loadClass($className) {
         //处理斜杠,linux系统中得用/
         $className = str_replace('\\', '/', $className);
         //取出左边的路径
