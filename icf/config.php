@@ -10,12 +10,19 @@
 
 return [
     'debug' => true,
-
+    'db' => [
+        'type' => 'mysql',
+        'server' => 'localhost',
+        'port' => 3306,
+        'db' => 'tmp',
+        'user' => 'root',
+        'pwd' => ''
+    ],
     //模块,控制器,操作 默认关键字
     'model_key' => 'm',
     'ctrl_key' => 'c',
     'action_key' => 'a',
     'route' => ['*' => ['debug/{test}' => 'index->debug']],
-    'tpl_suffix'=>'html',
-    'public'=>'public'
+    'tpl_suffix' => 'html',
+    'public' => 'public'
 ];

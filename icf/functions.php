@@ -106,3 +106,4 @@ function input($var,$val=null) {
 function view(){
     return new \icf\lib\view();
 }
+

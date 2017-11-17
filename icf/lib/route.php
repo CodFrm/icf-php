@@ -144,46 +144,43 @@ class route {
 
 
     static function runAction() {
-        try {
-            $tmp = self::$classNamePace;
-            $object = new $tmp();
-            // 获取方法参数
-            $method = new \ReflectionMethod ($object, self::$action);
-            // 参数绑定
-            $param = [];
-            $_GET = array_merge($_GET, self::$get);
-            foreach ($method->getParameters() as $value) {
-                if ($val = _get($value->getName())) {
-                    $param [] = $val;
-                } else {
-                    $param [] = $value->getDefaultValue();
-                }
-            }
-            //加载全局函数
-            $comPath = __ROOT_ . '/app/common.php';
-            if (file_exists($comPath)) {
-                require_once $comPath;
-            }
-            //加载模块函数
-            $comPath = __ROOT_ . '/app/' . self::$model . '/';
-            if (file_exists($comPath . 'common.php')) {
-                require_once $comPath . 'common.php';
-            }
-            input('model',route::$model);
-            input('ctrl',route::$ctrl);
-            input('action',route::$action);
 
-            $data = call_user_func_array([
-                $object,
-                self::$action
-            ], $param);
-            if (is_array($data)) {
-                echo json($data);
+        $tmp = self::$classNamePace;
+        $object = new $tmp();
+        // 获取方法参数
+        $method = new \ReflectionMethod ($object, self::$action);
+        // 参数绑定
+        $param = [];
+        $_GET = array_merge($_GET, self::$get);
+        foreach ($method->getParameters() as $value) {
+            if ($val = _get($value->getName())) {
+                $param [] = $val;
             } else {
-                echo $data;
+                $param [] = $value->getDefaultValue();
             }
-        } catch (\Exception $e) {
-            return false;
+        }
+        //加载全局函数
+        $comPath = __ROOT_ . '/app/common.php';
+        if (file_exists($comPath)) {
+            require_once $comPath;
+        }
+        //加载模块函数
+        $comPath = __ROOT_ . '/app/' . self::$model . '/';
+        if (file_exists($comPath . 'common.php')) {
+            require_once $comPath . 'common.php';
+        }
+        input('model', route::$model);
+        input('ctrl', route::$ctrl);
+        input('action', route::$action);
+
+        $data = call_user_func_array([
+            $object,
+            self::$action
+        ], $param);
+        if (is_array($data)) {
+            echo json($data);
+        } else {
+            echo $data;
         }
         return true;
     }

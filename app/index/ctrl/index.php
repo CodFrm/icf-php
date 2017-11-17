@@ -11,6 +11,7 @@
 namespace app\index\ctrl;
 
 
+use icf\lib\db;
 use icf\lib\view;
 
 class index {
@@ -20,6 +21,8 @@ class index {
 
     public function debug($test = 'hello') {
         echo $test;
+        $db=new db();
+
     }
 
     public function template(){

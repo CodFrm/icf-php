@@ -8,8 +8,6 @@
  *============================
  */
 
-//namespace icf;
-
 //注册自动装载
 spl_autoload_register('loader::loadClass');
 
