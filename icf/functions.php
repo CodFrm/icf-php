@@ -86,12 +86,12 @@ function _404() {
  * @param string $var
  * @return mixed
  */
-function input($var,$val=null) {
+function input($var, $val = null) {
     $arrVar = explode('.', $var);
     if (sizeof($arrVar) <= 1) {
-        $ret = _global($var,$val);
+        $ret = _global($var, $val);
     } else {
-        $ret = _global($arrVar [0],$val);
+        $ret = _global($arrVar [0], $val);
         unset ($arrVar [0]);
         foreach ($arrVar as $value) {
             if (!isset ($ret [$value])) {
@@ -103,7 +103,39 @@ function input($var,$val=null) {
     return $ret;
 }
 
-function view(){
+function view() {
     return new \icf\lib\view();
 }
 
+/**
+ * 获取客户ip
+ * @author Farmer
+ * @return string
+ */
+function getip() {
+    $arr_ip_header = array(
+        'HTTP_CDN_SRC_IP',
+        'HTTP_PROXY_CLIENT_IP',
+        'HTTP_WL_PROXY_CLIENT_IP',
+        'HTTP_CLIENT_IP',
+        'HTTP_X_FORWARDED_FOR',
+        'REMOTE_ADDR',
+    );
+    $client_ip = 'unknown';
+    foreach ($arr_ip_header as $key) {
+        if (!empty($_SERVER[$key]) && strtolower($_SERVER[$key]) != 'unknown') {
+            $client_ip = $_SERVER[$key];
+            break;
+        }
+    }
+    return $client_ip;
+}
+
+/**
+ * 获取请求地址
+ * @author Farmer
+ * @return string
+ */
+function getReqUrl(){
+    return $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+}

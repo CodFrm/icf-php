@@ -10,6 +10,7 @@
 
 namespace icf;
 
+use icf\lib\log;
 use lib\route;
 
 require_once 'functions.php';
@@ -43,6 +44,12 @@ class index {
         } else {
             error_reporting(E_ALL ^ E_NOTICE ^ E_WARNING);
             ini_set('display_errors', '0');
+        }
+        print_r($_SERVER);
+        //记录这一次日志
+        if(input('config.log')){
+            $log=new log();
+            $log->notice('ip:'.getip().' url:'.getReqUrl());
         }
         //路由加载
         if (isset($config['route'])) {

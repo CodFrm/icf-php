@@ -36,6 +36,10 @@ class route {
     static $matchUrl = '';
 
     static function matchRule($match, $pathInfo) {
+        //初始化
+        self::$model = '';
+        self::$ctrl = '';
+        self::$action = '';
         //处理各个参数
         $param = '';
         if ($cut = strpos($match[0], '#')) {
@@ -54,6 +58,7 @@ class route {
         }, $match[0]);
         self::$replace_param = $match[1];
         self::$get = [];
+        $count = 0;
         preg_replace_callback('#^\/' . $var . '#', function ($v) {
             foreach ($v as $key => $value) {
                 self::$replace_param = str_replace('${' . $key . '}', $value, self::$replace_param);
@@ -63,7 +68,10 @@ class route {
             }
             self::$matchUrl = $v[0];
             return '';
-        }, $pathInfo, 1);
+        }, $pathInfo, 1, $count);
+        if ($count <= 0) {
+            return false;
+        }
         $mca = explode('->', self::$replace_param);
         if (sizeof($mca) == 1) {
             self::$model = _get(_config('model_key'), __DEFAULT_MODEL_);
@@ -144,7 +152,6 @@ class route {
 
 
     static function runAction() {
-
         $tmp = self::$classNamePace;
         $object = new $tmp();
         // 获取方法参数
@@ -172,7 +179,6 @@ class route {
         input('model', route::$model);
         input('ctrl', route::$ctrl);
         input('action', route::$action);
-
         $data = call_user_func_array([
             $object,
             self::$action

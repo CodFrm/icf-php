@@ -20,6 +20,13 @@ namespace icf\lib;
 class view {
     private static $tplVar = array();
 
+    public function __construct() {
+        //检查缓存目录
+        if (!file_exists(__ROOT_.'/app/cache/tpl')){
+            mkdir(__ROOT_.'/app/cache/tpl',0777,true);
+        }
+    }
+
     /**
      * 设置值
      *

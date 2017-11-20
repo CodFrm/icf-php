@@ -25,5 +25,6 @@ return [
     'action_key' => 'a',
     'route' => ['*' => ['debug/{test}' => 'index->debug']],
     'tpl_suffix' => 'html',
-    'public' => 'public'
+    'public' => 'public',
+    'log'=>true
 ];
