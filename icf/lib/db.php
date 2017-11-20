@@ -4,32 +4,20 @@
  * author:Farmer
  * time:2017/11/17
  * blog:blog.icodef.com
- * function:
+ * function:数据库驱动
  *============================
  */
 
 namespace icf\lib;
+use icf\lib\db\query;
 
-use PDO;
+/**
+ * 数据库驱动
+ * Class db
+ * @package icf\lib
+ */
 class db {
-    private static $db=null;
-    public function __construct() {
-        if (self::$db==null){
-            $dns = input('config.db.type') . ':dbname=' . input('config.db.db') . ';host=';
-            $dns .= input('config.db.server') . ';charset=utf8';
-            self::$db=new PDO($dns, input('config.db.user'), input('config.db.pwd'));
-            db::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            db::$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
-        }
-    }
-
-    private $where='';
-
-    public function where($field,$value='',$operator=''){
-        if (is_array($field)){
-            $this->where='';
-        }else if (is_string($field)){
-
-        }
+    public static function table($table) {
+        return new query($table);
     }
 }

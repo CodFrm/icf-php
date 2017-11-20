@@ -21,8 +21,7 @@ class index {
 
     public function debug($test = 'hello') {
         echo $test;
-        $db=new db();
-
+        db::table('23');
     }
 
     public function template(){
