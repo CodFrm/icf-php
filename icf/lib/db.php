@@ -17,7 +17,7 @@ use icf\lib\db\query;
  * @package icf\lib
  */
 class db {
-    public static function table($table) {
+    public static function table($table='') {
         return new query($table);
     }
 }

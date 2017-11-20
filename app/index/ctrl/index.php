@@ -20,13 +20,19 @@ class index {
     }
 
     public function debug($test = 'hello') {
-        echo $test;
-        db::table('23');
+        echo $test . "<br/>";
+        $rec = db::table('tmp')->where('data', 'haha')->order('data', 'desc')->select();
+        print_r($rec->fetchAll());
+        echo "\r\n";
+        $count = db::table('tmp')->where('data', 'haha')->update(['data' => 'haha', 'value' => rand(1000, 10000)]);
+        echo "count:$count";
+        $count = db::table('tmp')->where('data=:data')->bind(':data', '5723')->delete();
+        echo "count:$count";
     }
 
-    public function template(){
-        $v=new view();
-        $v->assign('test',['ce'=>'emm','c3'=>'ha']);
+    public function template() {
+        $v = new view();
+        $v->assign('test', ['ce' => 'emm', 'c3' => 'ha']);
         $v->display();
     }
 }

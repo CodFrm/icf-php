@@ -16,7 +16,8 @@ return [
         'port' => 3306,
         'db' => 'tmp',
         'user' => 'root',
-        'pwd' => ''
+        'pwd' => '',
+        'prefix'=>'test_'
     ],
     //模块,控制器,操作 默认关键字
     'model_key' => 'm',
