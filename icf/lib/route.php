@@ -152,6 +152,16 @@ class route {
 
 
     static function runAction() {
+        //加载全局函数
+        $comPath = __ROOT_ . '/app/common.php';
+        if (file_exists($comPath)) {
+            require_once $comPath;
+        }
+        //加载模块函数
+        $comPath = __ROOT_ . '/app/' . self::$model . '/';
+        if (file_exists($comPath . 'common.php')) {
+            require_once $comPath . 'common.php';
+        }
         $tmp = self::$classNamePace;
         $object = new $tmp();
         // 获取方法参数
@@ -165,16 +175,6 @@ class route {
             } else {
                 $param [] = $value->getDefaultValue();
             }
-        }
-        //加载全局函数
-        $comPath = __ROOT_ . '/app/common.php';
-        if (file_exists($comPath)) {
-            require_once $comPath;
-        }
-        //加载模块函数
-        $comPath = __ROOT_ . '/app/' . self::$model . '/';
-        if (file_exists($comPath . 'common.php')) {
-            require_once $comPath . 'common.php';
         }
         input('model', route::$model);
         input('ctrl', route::$ctrl);

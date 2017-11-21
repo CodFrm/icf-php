@@ -53,10 +53,10 @@ class query {
             //获取最后一个
             $keys = array_keys($field);
             foreach ($field as $key => $item) {
-                $this->where .= "`$key`$operator?";
+                $this->where .= "`$key`$operator? ";
                 $this->bindParam[] = $item;
                 if ($key != end($keys)) {
-                    $this->where .= 'and';
+                    $this->where .= 'and ';
                 }
             }
         } else if (is_string($field)) {
@@ -131,6 +131,9 @@ class query {
         return false;
     }
 
+    public function count(){
+        return $this->field('count(*)')->find()['count(*)'];
+    }
     /**
      * 数据更新
      * @author Farmer
@@ -182,8 +185,8 @@ class query {
      */
     private function dealParam() {
         $sql = $this->where ?: '';
-        $sql .= $this->limit ?: '';
         $sql .= $this->order ?: '';
+        $sql .= $this->limit ?: '';
         return $sql;
     }
 
@@ -263,6 +266,21 @@ class query {
      */
     public function rollback() {
         $this->exec('rollback');
+    }
+
+    public function field($field,$alias='') {
+        if (is_string($field)){
+            if (empty($alias)){
+                $this->field .=(empty($this->field)?'':',').$field.' ';
+            }else{
+                $this->field .=(empty($this->field)?'':',').$field.' as '.$alias.' ';
+            }
+        }else if(is_array($field)){
+            foreach ($field as $key=>$value){
+                $this->field .=(empty($this->field)?'':',').$key.' as '.$value.' ';
+            }
+        }
+        return $this;
     }
 
     public function __call($func, $arguments) {

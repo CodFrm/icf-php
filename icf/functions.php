@@ -52,6 +52,28 @@ function _get($key, $default = false) {
     return _readValue($_GET, $key, $default);
 }
 
+/**
+ * 读取POST
+ * @author Farmer
+ * @param $key
+ * @param bool $default
+ * @return bool
+ */
+function _post($key, $default = false) {
+    return _readValue($_POST, $key, $default);
+}
+
+/**
+ * 读取COOKIE
+ * @author Farmer
+ * @param $key
+ * @param bool $default
+ * @return bool
+ */
+function _cookie($key, $default = false) {
+    return _readValue($_COOKIE, $key, $default);
+}
+
 function _readValue($data, $key, $default = false) {
     if (isset($data[$key])) {
         return $data[$key];
@@ -138,4 +160,20 @@ function getip() {
  */
 function getReqUrl(){
     return $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+}
+
+/**
+ * 生成访问URL
+ * @author Farmer
+ * @param string $action
+ * @param string $param
+ * @return string
+ */
+function url($action='',$param='') {
+    preg_match_all( '/([\w]+)/', $action, $arrMatch);
+    $url='';
+    foreach ($arrMatch[0] as $value){
+        $url.=('/'.$value);
+    }
+    return __HOME_.$url.($param?('?'.$param):'');
 }
