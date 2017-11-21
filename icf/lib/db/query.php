@@ -46,7 +46,7 @@ class query {
      * @return $this
      */
     public function where($field, $value = '', $operator = '=') {
-        $this->where .= ' ' . (empty($this->where) ? '' : $this->lastOper);
+        $this->where .= ' ' . (empty($this->where) ? '' : $this->lastOper.' ');
         //恢复默认运算符
         $this->lastOper = 'and';
         if (is_array($field)) {
@@ -240,8 +240,7 @@ class query {
      * @return mixed
      */
     public function find() {
-        self::limit('1');
-        return self::select()->fetch();
+        return  $this->limit('1')->select()->fetch();
     }
 
     /**
