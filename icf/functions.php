@@ -126,7 +126,11 @@ function input($var, $val = null) {
 }
 
 function view() {
-    return new \icf\lib\view();
+    static $view = null;
+    if ($view == null) {
+        $view = new \icf\lib\view();
+    }
+    return $view;
 }
 
 /**

@@ -87,8 +87,8 @@ class route {
             self::$action = _get(_config('action_key'), $mca[2]);
         }
         self::$classNamePace = 'app\\' . self::$model . '\\ctrl\\' . self::$ctrl;
-        $className = str_replace('\\', '/',  self::$classNamePace);
-        if (!is_file($className. '.php')) {
+        $className = str_replace('\\', '/', self::$classNamePace);
+        if (!is_file($className . '.php')) {
             return false;
         }
         $tmpParam = '';
@@ -142,8 +142,8 @@ class route {
             self::$ctrl = _get(_config('ctrl_key'), 'index');
             self::$action = _get(_config('action_key'), 'index');
             self::$classNamePace = 'app\\' . self::$model . '\\ctrl\\' . self::$ctrl;
-            $className = str_replace('\\', '/',  self::$classNamePace);
-            if (!is_file($className. '.php')) {
+            $className = str_replace('\\', '/', self::$classNamePace);
+            if (!is_file($className . '.php')) {
                 _404();
                 return false;
             }
@@ -154,6 +154,9 @@ class route {
 
 
     static function runAction() {
+        input('model', route::$model);
+        input('ctrl', route::$ctrl);
+        input('action', route::$action);
         //加载全局函数
         $comPath = __ROOT_ . '/app/common.php';
         if (file_exists($comPath)) {
@@ -164,31 +167,32 @@ class route {
         if (file_exists($comPath . 'common.php')) {
             require_once $comPath . 'common.php';
         }
-        $tmp = self::$classNamePace;
-        $object = new $tmp();
-        // 获取方法参数
-        $method = new \ReflectionMethod ($object, self::$action);
-        // 参数绑定
-        $param = [];
-        $_GET = array_merge($_GET, self::$get);
-        foreach ($method->getParameters() as $value) {
-            if ($val = _get($value->getName())) {
-                $param [] = $val;
-            } else {
-                $param [] = $value->getDefaultValue();
+        try {
+            $tmp = self::$classNamePace;
+            $object = new $tmp();
+            // 获取方法参数
+            $method = new \ReflectionMethod ($object, self::$action);
+            // 参数绑定
+            $param = [];
+            $_GET = array_merge($_GET, self::$get);
+            foreach ($method->getParameters() as $value) {
+                if ($val = _get($value->getName())) {
+                    $param [] = $val;
+                } else {
+                    $param [] = $value->getDefaultValue();
+                }
             }
-        }
-        input('model', route::$model);
-        input('ctrl', route::$ctrl);
-        input('action', route::$action);
-        $data = call_user_func_array([
-            $object,
-            self::$action
-        ], $param);
-        if (is_array($data)) {
-            echo json($data);
-        } else {
-            echo $data;
+            $data = call_user_func_array([
+                $object,
+                self::$action
+            ], $param);
+            if (is_array($data)) {
+                echo json($data);
+            } else {
+                echo $data;
+            }
+        } catch (\Exception $e) {
+            _404();
         }
         return true;
     }
