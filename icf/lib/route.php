@@ -97,7 +97,7 @@ class route {
         }
         if (strpos($param, 'p') !== false) {
             //处理后方参数
-            preg_match_all('#([\S][^\{^\}^/]*)/([\S][^\{^\}^/]*)#', $tmpParam, $matchArr, PREG_SET_ORDER);
+            preg_match_all('#/([\S][^\{^\}^/]*)/([\S][^\{^\}^/]*)#', '/'.$tmpParam, $matchArr, PREG_SET_ORDER);
             foreach ($matchArr as $item) {
                 self::$get[$item[1]] = $item[2];
             }
@@ -117,12 +117,14 @@ class route {
     static function analyze() {
         if (isset($_SERVER['PATH_INFO'])) {
             $pathInfo = $_SERVER['PATH_INFO'];
-            $tmpRule = self::$rule[strtolower($_SERVER['REQUEST_METHOD'])];
-            foreach ($tmpRule as $key => $value) {
-                //匹配规则
-                if (self::matchRule([$key, $value], $pathInfo)) {
-                    if (self::runAction()) {
-                        return;
+            if (isset(self::$rule[strtolower($_SERVER['REQUEST_METHOD'])])) {
+                $tmpRule = self::$rule[strtolower($_SERVER['REQUEST_METHOD'])];
+                foreach ($tmpRule as $key => $value) {
+                    //匹配规则
+                    if (self::matchRule([$key, $value], $pathInfo)) {
+                        if (self::runAction()) {
+                            return;
+                        }
                     }
                 }
             }
