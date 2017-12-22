@@ -17,6 +17,7 @@ use icf\lib\view;
 class index {
     public function index() {
         echo 'test';
+        echo db::table('hg')->select();
     }
 
     public function debug($test = 'hello') {

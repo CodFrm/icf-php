@@ -11,6 +11,9 @@
 namespace lib;
 
 
+use icf\index;
+use icf\lib\log;
+
 class route {
     static $model = '';//模块
     static $ctrl = '';//控制器
@@ -97,7 +100,7 @@ class route {
         }
         if (strpos($param, 'p') !== false) {
             //处理后方参数
-            preg_match_all('#/([\S][^\{^\}^/]*)/([\S][^\{^\}^/]*)#', '/'.$tmpParam, $matchArr, PREG_SET_ORDER);
+            preg_match_all('#/([\S][^\{^\}^/]*)/([\S][^\{^\}^/]*)#', '/' . $tmpParam, $matchArr, PREG_SET_ORDER);
             foreach ($matchArr as $item) {
                 self::$get[$item[1]] = $item[2];
             }
@@ -189,12 +192,26 @@ class route {
                 self::$action
             ], $param);
             if (is_array($data)) {
+                header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
+                header("Cache-Control: no-cache, must-revalidate");
+                header("Pragma: no-cache");
+                header('Content-Type: application/json; charset=utf-8');
                 echo json($data);
             } else {
                 echo $data;
             }
         } catch (\Exception $e) {
-            _404();
+            if (input('config.debug')) {
+                if (input('config.log')) {
+                    index::$log->error('[file] ' . $e->getFile() . ' [line] ' . $e->getLine() . ' [error] ' . $e->getMessage());
+                }
+                echo "file:" . $e->getFile() . "<br/>\n";
+                echo "line:" . $e->getLine() . "<br/>\n";
+                echo "error:" . $e->getMessage() . "<br/>\n";
+                var_dump($e->getTrace());
+            } else {
+                _404();
+            }
         }
         return true;
     }

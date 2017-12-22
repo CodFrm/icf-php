@@ -17,7 +17,7 @@ require_once 'functions.php';
 date_default_timezone_set('PRC');
 $home = $_SERVER['REQUEST_URI'];
 if (!empty($_SERVER['QUERY_STRING'])) {
-    $home=substr($_SERVER['REQUEST_URI'],0,strpos($home,'?'));
+    $home = substr($_SERVER['REQUEST_URI'], 0, strpos($home, '?'));
 }
 if (isset($_SERVER['PATH_INFO'])) {
     $home = str_replace($_SERVER['PATH_INFO'], '', $home);
@@ -30,10 +30,13 @@ if (!isset($_SERVER['REQUEST_SCHEME'])) {
 define('__HOME_', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $home);
 
 class index {
+    static $log;
+
     /**
      * 运行框架
      */
     public static function run() {
+        self::$log = new log();
         //加载配置
         $config = include 'config.php';
         _global('config', $config);
@@ -46,9 +49,9 @@ class index {
             ini_set('display_errors', '0');
         }
         //记录这一次日志
-        if(input('config.log')){
-            $log=new log();
-            $log->notice('ip:'.getip().' url:'.getReqUrl());
+        if (input('config.log')) {
+            self::$log->notice('ip:' . getip() . ' url:' . getReqUrl() . ' post:' . json_encode($_POST, JSON_UNESCAPED_UNICODE)
+                . ' cookie:' . json_encode($_COOKIE, JSON_UNESCAPED_UNICODE));
         }
         //路由加载
         if (isset($config['route'])) {

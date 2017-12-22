@@ -17,7 +17,7 @@ return [
         'db' => 'tmp',
         'user' => 'root',
         'pwd' => '',
-        'prefix'=>'test_'
+        'prefix' => 'test_'
     ],
     //模块,控制器,操作 默认关键字
     'model_key' => 'm',
@@ -26,5 +26,5 @@ return [
     'route' => ['*' => ['debug/{test}' => 'index->debug']],
     'tpl_suffix' => 'html',
     'public' => 'public',
-    'log'=>true
+    'log' => true
 ];

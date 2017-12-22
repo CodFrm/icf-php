@@ -155,7 +155,13 @@ class query {
     }
 
     public function count() {
-        return $this->field('count(*)')->find()['count(*)'];
+        $tmpField = $this->field;
+        $tmpLimit = $this->limit;
+        $this->field = '';
+        $count = $this->field('count(*)')->find()['count(*)'];
+        $this->field = $tmpField;
+        $this->limit = $tmpLimit;
+        return $count;
     }
 
     /**
@@ -238,7 +244,11 @@ class query {
      * @return $this
      */
     public function order($field, $rule = 'desc') {
-        $this->order = " order by `$field` $rule";
+        if ($this->order) {
+            $this->order .= ",`$field` $rule";
+        } else {
+            $this->order = " order by `$field` $rule";
+        }
         return $this;
     }
 
@@ -309,6 +319,15 @@ class query {
             }
         }
         return $this;
+    }
+
+    /**
+     * 上一个插入id
+     * @author Farmer
+     * @return string
+     */
+    public function lastinsertid() {
+        return self::$db->lastInsertId();
     }
 
     public function __call($func, $arguments) {
