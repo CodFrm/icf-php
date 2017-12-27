@@ -158,8 +158,8 @@ function getip() {
  * @author Farmer
  * @return string
  */
-function getReqUrl(){
-    return $_SERVER['REQUEST_SCHEME'].'://'.$_SERVER['SERVER_NAME'].':'.$_SERVER["SERVER_PORT"].$_SERVER["REQUEST_URI"];
+function getReqUrl() {
+    return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
 }
 
 /**
@@ -169,11 +169,11 @@ function getReqUrl(){
  * @param string $param
  * @return string
  */
-function url($action='',$param='') {
-    preg_match_all( '/([\w]+)/', $action, $arrMatch);
-    $url='';
-    foreach ($arrMatch[0] as $value){
-        $url.=('/'.$value);
+function url($action = '', $param = '') {
+    preg_match_all('/([\w]+)/', $action, $arrMatch);
+    $url = '';
+    foreach ($arrMatch[0] as $value) {
+        $url .= ('/' . $value);
     }
-    return __HOME_.$url.($param?('?'.$param):'');
+    return __HOME_ . $url . ($param ? ('?' . $param) : '');
 }

@@ -1,4 +1,6 @@
 .idea
 /app/cache/tpl/*.php
 *.log
+/icf/res
+
 

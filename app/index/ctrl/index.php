@@ -12,12 +12,13 @@ namespace app\index\ctrl;
 
 
 use icf\lib\db;
+use icf\lib\ImageVerifyCode;
 use icf\lib\view;
 
 class index {
     public function index() {
-        echo 'test';
-        echo db::table('hg')->select();
+        $v = new ImageVerifyCode();
+        $v->display();
     }
 
     public function debug($test = 'hello') {
