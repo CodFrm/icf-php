@@ -12,13 +12,18 @@ namespace app\index\ctrl;
 
 
 use icf\lib\db;
-use icf\lib\ImageVerifyCode;
+use icf\lib\info\AliSms;
+use icf\lib\other\ImageVerifyCode;
 use icf\lib\view;
 
 class index {
     public function index() {
         $v = new ImageVerifyCode();
         $v->display();
+    }
+    public function sms($phone=''){
+        $sms=new AliSms('LTAINi8D1CVqk6Wv','MniMfZHFMI4axWOvU3VzrKsii9c3F7');
+        return $sms->sendSms('爱编码的Farmer','SMS_119087721',['code'=>'test'.rand(10,99)],$phone);
     }
 
     public function debug($test = 'hello') {

@@ -9,7 +9,7 @@
  */
 
 
-namespace icf\lib;
+namespace icf\lib\other;
 
 
 class ImageVerifyCode {
