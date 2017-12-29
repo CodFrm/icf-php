@@ -22,8 +22,8 @@ class view {
 
     public function __construct() {
         //检查缓存目录
-        if (!file_exists(__ROOT_.'/app/cache/tpl')){
-            mkdir(__ROOT_.'/app/cache/tpl',0777,true);
+        if (!file_exists(__ROOT_ . '/app/cache/tpl')) {
+            mkdir(__ROOT_ . '/app/cache/tpl', 0777, true);
         }
     }
 
@@ -41,13 +41,26 @@ class view {
     }
 
     /**
-     * 载入编译模板文件
-     *
+     * 输出模板内容
      * @author Farmer
      * @param string $filename
      * @return null
      */
     public function display($filename = '') {
+        $cache = self::compile($filename);
+        if ($cache) {
+            echo $cache;
+            return true;
+        }
+        return false;
+    }
+
+    /**
+     * 返回编译内容
+     * @param $filename
+     * @return string
+     */
+    public function compile($filename = '') {
         if ($filename === '') {
             $filename = input('action');
         }
@@ -65,12 +78,11 @@ class view {
             return false;
         }
         $cache = __ROOT_ . '/app/cache/tpl/' . md5($path) . '.php';
-        self::fetch($path, $cache);
-        return null;
+        return self::fetch($path, $cache);
     }
 
     /**
-     * 生成编译文件并输出
+     * 生成编译文件并返回
      *
      * @author Farmer
      * @param string $path
@@ -113,11 +125,9 @@ class view {
             $cacheData = file_get_contents($cache);
         }
         $pattern = array(
-            '/__PUBLIC__/',
             '/__HOME__/'
         );
         $replace = array(
-            input('config.public'),
             __HOME_
         );
         $cacheData = preg_replace($pattern, $replace, $cacheData);
@@ -127,7 +137,11 @@ class view {
                 self::$tplVar [$tmp [1] [$i]] = '';
             }
         }
+        ob_start();
         extract(self::$tplVar);
         eval ('?>' . $cacheData);
+        $content = ob_get_contents();
+        ob_end_clean();
+        return $content;
     }
 }
