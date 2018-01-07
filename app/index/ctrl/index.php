@@ -18,12 +18,17 @@ use icf\lib\view;
 
 class index {
     public function index() {
+
+    }
+
+    public function vcode() {
         $v = new ImageVerifyCode();
         $v->display();
     }
-    public function sms($phone=''){
-        $sms=new AliSms('LTAINi8D1CVqk6Wv','MniMfZHFMI4axWOvU3VzrKsii9c3F7');
-        return $sms->sendSms('爱编码的Farmer','SMS_119087721',['code'=>'test'.rand(10,99)],$phone);
+
+    public function sms($phone = '') {
+        $sms = new AliSms('LTAINi8D1CVqk6Wv', 'MniMfZHFMI4axWOvU3VzrKsii9c3F7');
+        return $sms->sendSms('爱编码的Farmer', 'SMS_119087721', ['code' => 'test' . rand(10, 99)], $phone);
     }
 
     public function debug($test = 'hello') {
@@ -41,5 +46,18 @@ class index {
         $v = new view();
         $v->assign('test', ['ce' => 'emm', 'c3' => 'ha']);
         $v->display();
+    }
+
+    //rest test
+    public function getUsers() {
+        echo 'get method';
+    }
+
+    public function deleteUsers($uid=0) {
+        echo 'delete method uid:' . $uid;
+    }
+
+    public function users() {
+        echo 'does not exist';
     }
 }

@@ -49,6 +49,7 @@ class view {
     public function display($filename = '') {
         $cache = self::compile($filename);
         if ($cache) {
+            header('Content-type: text/html; charset=utf-8');
             echo $cache;
             return true;
         }

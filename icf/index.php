@@ -14,6 +14,7 @@ use icf\lib\log;
 use lib\route;
 
 require_once 'functions.php';
+require_once 'common/common.php';
 date_default_timezone_set('PRC');
 $home = $_SERVER['REQUEST_URI'];
 if (!empty($_SERVER['QUERY_STRING'])) {
@@ -27,7 +28,7 @@ if (isset($_SERVER['PATH_INFO'])) {
 if (!isset($_SERVER['REQUEST_SCHEME'])) {
     $_SERVER['REQUEST_SCHEME'] = 'http';
 }
-define('__HOME_', $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['HTTP_HOST'] . $home);
+define('__HOME_', '//' . $_SERVER['HTTP_HOST'] . $home);
 
 class index {
     static $log;
@@ -39,6 +40,10 @@ class index {
         self::$log = new log();
         //加载配置
         $config = include 'config.php';
+        $modConfig = __ROOT_ . '/app/' . __DEFAULT_MODEL_ . '/config.php';
+        if (file_exists($modConfig)) {
+            $config = array_merge_in($config, include $modConfig);
+        }
         _global('config', $config);
         //调试模式
         if (_config('debug')) {

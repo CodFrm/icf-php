@@ -19,14 +19,15 @@ class route {
     static $ctrl = '';//控制器
     static $action = '';//操作
 
-    static $rule = ['*' =>
-        [
+    static $rule = [
+        '*' => [
             '{s}.php' => '${1}->index->index',
             '{s}/{s}/{s}#p' => '${1}->${2}->${3}',
             '{s}/{s}#p' => '${1}->${2}',
             '{s}#p' => '${1}->index'
-        ],
-        'get' => []];
+        ], 'get' => [
+
+        ]];
 
     static $get_param = [];
 
@@ -37,6 +38,8 @@ class route {
     static $get = [];
 
     static $matchUrl = '';
+
+    static $req_method = 'get';
 
     static function matchRule($match, $pathInfo) {
         //初始化
@@ -118,10 +121,11 @@ class route {
      * @author Farmer
      */
     static function analyze() {
+        self::$req_method = strtolower($_SERVER['REQUEST_METHOD']);
         if (isset($_SERVER['PATH_INFO'])) {
             $pathInfo = $_SERVER['PATH_INFO'];
-            if (isset(self::$rule[strtolower($_SERVER['REQUEST_METHOD'])])) {
-                $tmpRule = self::$rule[strtolower($_SERVER['REQUEST_METHOD'])];
+            if (isset(self::$rule[self::$req_method])) {
+                $tmpRule = self::$rule[self::$req_method];
                 foreach ($tmpRule as $key => $value) {
                     //匹配规则
                     if (self::matchRule([$key, $value], $pathInfo)) {
@@ -175,6 +179,12 @@ class route {
         try {
             $tmp = self::$classNamePace;
             $object = new $tmp();
+            if (input('config.rest')) {
+                $tmpMethod = self::$req_method . self::$action;
+                if (method_exists($object, $tmpMethod)) {
+                    self::$action = $tmpMethod;
+                }
+            }
             // 获取方法参数
             $method = new \ReflectionMethod ($object, self::$action);
             // 参数绑定
@@ -192,9 +202,6 @@ class route {
                 self::$action
             ], $param);
             if (is_array($data)) {
-                header("Expires: Mon, 26 Jul 1997 05:00:00 GMT");
-                header("Cache-Control: no-cache, must-revalidate");
-                header("Pragma: no-cache");
                 header('Content-Type: application/json; charset=utf-8');
                 echo json($data);
             } else {

@@ -82,22 +82,6 @@ function _readValue($data, $key, $default = false) {
 }
 
 /**
- * Json 编码 对于中文处理 仅支持php5.4以后的版本
- *
- * @author Farmer
- * @param string $str
- * @return string
- */
-function json($str) {
-    return json_encode($str, JSON_UNESCAPED_UNICODE);
-}
-
-
-function _404() {
-    echo '404';
-}
-
-/**
  * 获取变量
  *
  * @author Farmer
@@ -127,53 +111,4 @@ function view() {
         $view = new \icf\lib\view();
     }
     return $view;
-}
-
-/**
- * 获取客户ip
- * @author Farmer
- * @return string
- */
-function getip() {
-    $arr_ip_header = array(
-        'HTTP_CDN_SRC_IP',
-        'HTTP_PROXY_CLIENT_IP',
-        'HTTP_WL_PROXY_CLIENT_IP',
-        'HTTP_CLIENT_IP',
-        'HTTP_X_FORWARDED_FOR',
-        'REMOTE_ADDR',
-    );
-    $client_ip = 'unknown';
-    foreach ($arr_ip_header as $key) {
-        if (!empty($_SERVER[$key]) && strtolower($_SERVER[$key]) != 'unknown') {
-            $client_ip = $_SERVER[$key];
-            break;
-        }
-    }
-    return $client_ip;
-}
-
-/**
- * 获取请求地址
- * @author Farmer
- * @return string
- */
-function getReqUrl() {
-    return $_SERVER['REQUEST_SCHEME'] . '://' . $_SERVER['SERVER_NAME'] . ':' . $_SERVER["SERVER_PORT"] . $_SERVER["REQUEST_URI"];
-}
-
-/**
- * 生成访问URL
- * @author Farmer
- * @param string $action
- * @param string $param
- * @return string
- */
-function url($action = '', $param = '') {
-    preg_match_all('/([\w]+)/', $action, $arrMatch);
-    $url = '';
-    foreach ($arrMatch[0] as $value) {
-        $url .= ('/' . $value);
-    }
-    return __HOME_ . $url . ($param ? ('?' . $param) : '');
 }
