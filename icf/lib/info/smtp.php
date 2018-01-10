@@ -8,7 +8,7 @@
  *============================
  */
 
-namespace icf\lib;
+namespace icf\lib\info;
 
 class smtp {
     /**

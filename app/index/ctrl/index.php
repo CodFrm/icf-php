@@ -18,7 +18,7 @@ use icf\lib\view;
 
 class index {
     public function index() {
-
+        echo url('vcode');
     }
 
     public function vcode() {

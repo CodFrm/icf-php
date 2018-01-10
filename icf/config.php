@@ -27,5 +27,10 @@ return [
     'action_key' => 'a',
     'route' => ['*' => ['debug/{test}' => 'index->debug']],
     'tpl_suffix' => 'html',
-    'log' => true
+    'log' => true,
+    //url 样式
+    //0=model/ctrl/action/key1/value1/key2/value2
+    //1=model.php?{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+    //2=?{$model_key}=model&{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+    'url_style' => 1
 ];

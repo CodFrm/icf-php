@@ -16,7 +16,7 @@
  * @param $mode
  * @return bool
  */
-function isExist($array, $mode, &$data = '') {
+function verify($array, $mode, &$data = '') {
     foreach ($mode as $key => $value) {
         if (is_string($value)) {
             if (empty($array[$key])) {
@@ -66,10 +66,11 @@ function isExist($array, $mode, &$data = '') {
  * @return string
  */
 function getRandString($length, $type = 2) {
-    $randString = '1234567890qwwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHHJKLZXCVBNM';
+    $randString = '1234567890qwertyuiopasdfghjklzxcvbnmQWERTYUIOPASDFGHJKLZXCVBNM';
     $retStr = '';
+    $type = 9 + $type * 26;
     for ($n = 0; $n < $length; $n++) {
-        $retStr .= substr($randString, mt_rand(0, 9 + $type * 24), 1);
+        $retStr .= substr($randString, mt_rand(0, $type), 1);
     }
     return $retStr;
 }

@@ -61,17 +61,91 @@ function getReqUrl() {
  * @param string $param
  * @return string
  */
-function url($action = '', $param = '') {
-    preg_match_all('/([\w]+)/', $action, $arrMatch);
-    $url = '';
-    foreach ($arrMatch[0] as $value) {
-        $url .= ('/' . $value);
+function url($model = '', $ctrl = '', $action = '', $param = [], $style = null) {
+    if (is_null($style)) {
+        $style = input('config.url_style');
     }
-    return __HOME_ . $url . ($param ? ('?' . $param) : '');
+    //根据参数个数来交换mca和param
+    $args = func_num_args();
+    switch ($args) {
+        case 1:
+            {
+                $action = $model;
+                $model = input('model');
+                $ctrl = input('ctrl');
+                break;
+            }
+        case 2:
+            {
+                if (is_array($ctrl)) {
+                    $action = $model;
+                    $model = input('model');
+                    $param = $ctrl;
+                    $ctrl = input('ctrl');
+                } else {
+                    $action = $ctrl;
+                    $ctrl = $model;
+                    $model = input('model');
+                }
+                break;
+            }
+        case 3:
+            {
+                if (is_array($action)) {
+                    $action = $ctrl;
+                    $ctrl = $model;
+                    $model = input('model');
+                    $param = $action;
+                }
+                break;
+            }
+    }
+    $url = __HOME_;
+    $p_left = '';
+    $p_mid = '';
+    switch ($style) {
+        case 0:
+            {
+                //model/ctrl/action/key1/value1/key2/value2
+                $url .= "$model/$ctrl/$action";
+                $p_left = '/';
+                $p_mid = '/';
+                break;
+            }
+        case 1:
+            {
+                //model.php?{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+                $url .= '/' . $model . '.php?' . input('config.ctrl_key') . '=' . $ctrl .
+                    '&' . input('config.action_key') . '=' . $action;
+                $p_left = '&';
+                $p_mid = '=';
+                break;
+            }
+        case 2:
+            {
+                //{$model_key}=model&{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+                $url .= '?' . input('config.model_key') . '=' . $model . '&' . input('config.ctrl_key') . '=' . $ctrl .
+                    '&' . input('config.action_key') . '=' . $action;
+                $p_left = '&';
+                $p_mid = '=';
+                break;
+            }
+        default:
+            {
+                $p_left = '&';
+                $p_mid = '=';
+                break;
+            }
+    }
+    foreach ($param as $key => $value) {
+        $url .= "{$p_left}{$key}{$p_mid}{$value}";
+    }
+    return $url;
 }
 
 
 function _404() {
+    \icf\lib\other\HttpHelp::setStatusCode(404);
     echo '404';
 }
 
@@ -92,8 +166,8 @@ function array_merge_in($array1, $array2 = null) {
     $tmpArr = array_merge($array1, $array2);
     if ($towArr != []) {
         $towArr = array_merge($tmpArr, $towArr);
-    }else{
-        $towArr=$tmpArr;
+    } else {
+        $towArr = $tmpArr;
     }
     return $towArr;
 }
