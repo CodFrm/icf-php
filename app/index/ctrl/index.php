@@ -11,6 +11,7 @@
 namespace app\index\ctrl;
 
 
+use app\index\model\userModel;
 use icf\lib\db;
 use icf\lib\info\AliSms;
 use icf\lib\other\ImageVerifyCode;
@@ -19,6 +20,12 @@ use icf\lib\view;
 class index {
     public function index() {
         echo url('vcode');
+    }
+
+    public function user($uid) {
+        //http://127.0.0.1/icf-php/index/user/uid/6
+        $user = new userModel($uid);
+        return $user->getUserMsg();
     }
 
     public function vcode() {
@@ -53,7 +60,7 @@ class index {
         echo 'get method';
     }
 
-    public function deleteUsers($uid=0) {
+    public function deleteUsers($uid = 0) {
         echo 'delete method uid:' . $uid;
     }
 

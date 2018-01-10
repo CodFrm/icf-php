@@ -147,7 +147,7 @@ class route {
             _404();
             return;
         } else {
-            self::$module = _get(_config('module_key'), __DEFAULT_module_);
+            self::$module = _get(_config('module_key'), __DEFAULT_MODULE_);
             self::$ctrl = _get(_config('ctrl_key'), 'index');
             self::$action = _get(_config('action_key'), 'index');
             self::$classNamePace = 'app\\' . self::$module . '\\ctrl\\' . self::$ctrl;
@@ -194,7 +194,7 @@ class route {
                 if ($val = _get($value->getName())) {
                     $param [] = $val;
                 } else {
-                    $param [] = $value->getDefaultValue();
+                    $param [] =  $value->isDefaultValueAvailable() ? $value->getDefaultValue() : '';
                 }
             }
             $data = call_user_func_array([
