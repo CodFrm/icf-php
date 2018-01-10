@@ -12,6 +12,6 @@ require_once 'icf/loader.php';
 
 //进入框架的入口
 define('__ROOT_',__DIR__);
-define('__DEFAULT_MODEL_','index');
+define('__DEFAULT_MODULE_','index');
 
 icf\index::run();

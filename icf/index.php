@@ -40,7 +40,7 @@ class index {
         self::$log = new log();
         //加载配置
         $config = include 'config.php';
-        $modConfig = __ROOT_ . '/app/' . __DEFAULT_MODEL_ . '/config.php';
+        $modConfig = __ROOT_ . '/app/' . __DEFAULT_MODULE_ . '/config.php';
         if (file_exists($modConfig)) {
             $config = array_merge_in($config, include $modConfig);
         }

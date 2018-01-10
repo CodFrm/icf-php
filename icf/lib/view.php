@@ -66,9 +66,9 @@ class view {
             $filename = input('action');
         }
         if (strpos($filename, '/') === false) {
-            $path = __ROOT_ . '/app/' . input('model') . '/tpl/' . input('ctrl') . '/' . $filename;
+            $path = __ROOT_ . '/app/' . input('module') . '/tpl/' . input('ctrl') . '/' . $filename;
         } else {
-            $path = __ROOT_ . '/app/' . input('model') . '/tpl/' . $filename;
+            $path = __ROOT_ . '/app/' . input('module') . '/tpl/' . $filename;
         }
         $suffix = '.' . input('config.tpl_suffix');
         if (substr($path, strlen($path) - strlen($suffix), strlen($suffix)) != $suffix) {

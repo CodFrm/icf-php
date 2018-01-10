@@ -61,7 +61,7 @@ function getReqUrl() {
  * @param string $param
  * @return string
  */
-function url($model = '', $ctrl = '', $action = '', $param = [], $style = null) {
+function url($module = '', $ctrl = '', $action = '', $param = [], $style = null) {
     if (is_null($style)) {
         $style = input('config.url_style');
     }
@@ -70,22 +70,22 @@ function url($model = '', $ctrl = '', $action = '', $param = [], $style = null) 
     switch ($args) {
         case 1:
             {
-                $action = $model;
-                $model = input('model');
+                $action = $module;
+                $module = input('module');
                 $ctrl = input('ctrl');
                 break;
             }
         case 2:
             {
                 if (is_array($ctrl)) {
-                    $action = $model;
-                    $model = input('model');
+                    $action = $module;
+                    $module = input('module');
                     $param = $ctrl;
                     $ctrl = input('ctrl');
                 } else {
                     $action = $ctrl;
-                    $ctrl = $model;
-                    $model = input('model');
+                    $ctrl = $module;
+                    $module = input('module');
                 }
                 break;
             }
@@ -93,8 +93,8 @@ function url($model = '', $ctrl = '', $action = '', $param = [], $style = null) 
             {
                 if (is_array($action)) {
                     $action = $ctrl;
-                    $ctrl = $model;
-                    $model = input('model');
+                    $ctrl = $module;
+                    $module = input('module');
                     $param = $action;
                 }
                 break;
@@ -106,16 +106,16 @@ function url($model = '', $ctrl = '', $action = '', $param = [], $style = null) 
     switch ($style) {
         case 0:
             {
-                //model/ctrl/action/key1/value1/key2/value2
-                $url .= "$model/$ctrl/$action";
+                //module/ctrl/action/key1/value1/key2/value2
+                $url .= "$module/$ctrl/$action";
                 $p_left = '/';
                 $p_mid = '/';
                 break;
             }
         case 1:
             {
-                //model.php?{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
-                $url .= '/' . $model . '.php?' . input('config.ctrl_key') . '=' . $ctrl .
+                //module.php?{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+                $url .= '/' . $module . '.php?' . input('config.ctrl_key') . '=' . $ctrl .
                     '&' . input('config.action_key') . '=' . $action;
                 $p_left = '&';
                 $p_mid = '=';
@@ -123,8 +123,8 @@ function url($model = '', $ctrl = '', $action = '', $param = [], $style = null) 
             }
         case 2:
             {
-                //{$model_key}=model&{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
-                $url .= '?' . input('config.model_key') . '=' . $model . '&' . input('config.ctrl_key') . '=' . $ctrl .
+                //{$module_key}=module&{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+                $url .= '?' . input('config.module_key') . '=' . $module . '&' . input('config.ctrl_key') . '=' . $ctrl .
                     '&' . input('config.action_key') . '=' . $action;
                 $p_left = '&';
                 $p_mid = '=';

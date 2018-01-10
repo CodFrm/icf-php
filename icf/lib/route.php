@@ -15,7 +15,7 @@ use icf\index;
 use icf\lib\log;
 
 class route {
-    static $model = '';//模块
+    static $module = '';//模块
     static $ctrl = '';//控制器
     static $action = '';//操作
 
@@ -43,7 +43,7 @@ class route {
 
     static function matchRule($match, $pathInfo) {
         //初始化
-        self::$model = '';
+        self::$module = '';
         self::$ctrl = '';
         self::$action = '';
         //处理各个参数
@@ -80,19 +80,19 @@ class route {
         }
         $mca = explode('->', self::$replace_param);
         if (sizeof($mca) == 1) {
-            self::$model = _get(_config('model_key'), __DEFAULT_MODEL_);
+            self::$module = _get(_config('module_key'), __DEFAULT_MODULE_);
             self::$ctrl = _get(_config('ctrl_key'), 'index');
             self::$action = _get(_config('action_key'), $mca[0]);
         } else if (sizeof($mca) == 2) {
-            self::$model = _get(_config('model_key'), __DEFAULT_MODEL_);
+            self::$module = _get(_config('module_key'), __DEFAULT_MODULE_);
             self::$ctrl = _get(_config('ctrl_key'), $mca[0]);
             self::$action = _get(_config('action_key'), $mca[1]);
         } else if (sizeof($mca) == 3) {
-            self::$model = _get(_config('model_key'), $mca[0]);
+            self::$module = _get(_config('module_key'), $mca[0]);
             self::$ctrl = _get(_config('ctrl_key'), $mca[1]);
             self::$action = _get(_config('action_key'), $mca[2]);
         }
-        self::$classNamePace = 'app\\' . self::$model . '\\ctrl\\' . self::$ctrl;
+        self::$classNamePace = 'app\\' . self::$module . '\\ctrl\\' . self::$ctrl;
         $className = str_replace('\\', '/', self::$classNamePace);
         if (!is_file($className . '.php')) {
             return false;
@@ -147,10 +147,10 @@ class route {
             _404();
             return;
         } else {
-            self::$model = _get(_config('model_key'), __DEFAULT_MODEL_);
+            self::$module = _get(_config('module_key'), __DEFAULT_module_);
             self::$ctrl = _get(_config('ctrl_key'), 'index');
             self::$action = _get(_config('action_key'), 'index');
-            self::$classNamePace = 'app\\' . self::$model . '\\ctrl\\' . self::$ctrl;
+            self::$classNamePace = 'app\\' . self::$module . '\\ctrl\\' . self::$ctrl;
             $className = str_replace('\\', '/', self::$classNamePace);
             if (!is_file($className . '.php')) {
                 _404();
@@ -163,7 +163,7 @@ class route {
 
 
     static function runAction() {
-        input('model', route::$model);
+        input('module', route::$module);
         input('ctrl', route::$ctrl);
         input('action', route::$action);
         //加载全局函数
@@ -172,7 +172,7 @@ class route {
             require_once $comPath;
         }
         //加载模块函数
-        $comPath = __ROOT_ . '/app/' . self::$model . '/';
+        $comPath = __ROOT_ . '/app/' . self::$module . '/';
         if (file_exists($comPath . 'common.php')) {
             require_once $comPath . 'common.php';
         }

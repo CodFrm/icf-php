@@ -22,15 +22,15 @@ return [
     //开启restful
     'rest' => true,
     //模块,控制器,操作 默认关键字
-    'model_key' => 'm',
+    'module_key' => 'm',
     'ctrl_key' => 'c',
     'action_key' => 'a',
     'route' => ['*' => ['debug/{test}' => 'index->debug']],
     'tpl_suffix' => 'html',
     'log' => true,
     //url 样式
-    //0=model/ctrl/action/key1/value1/key2/value2
-    //1=model.php?{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
-    //2=?{$model_key}=model&{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+    //0=module/ctrl/action/key1/value1/key2/value2
+    //1=module.php?{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
+    //2=?{$module_key}=module&{$ctrl_key}=ctrl&{$action_key}=action&key1=value1
     'url_style' => 1
 ];
