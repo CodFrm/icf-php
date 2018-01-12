@@ -11,7 +11,7 @@
 namespace app\index\ctrl;
 
 
-use app\index\model\userModel;
+use app\index\model\user;
 use icf\lib\db;
 use icf\lib\info\AliSms;
 use icf\lib\other\ImageVerifyCode;
@@ -24,7 +24,7 @@ class index {
 
     public function user($uid) {
         //http://127.0.0.1/icf-php/index/user/uid/6
-        $user = new userModel($uid);
+        $user = new user($uid);
         return $user->getUserMsg();
     }
 

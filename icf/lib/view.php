@@ -28,6 +28,14 @@ class view {
     }
 
     /**
+     * 设置模板所在的模块
+     * @param $module
+     */
+    public function setModule($module) {
+        $this->module = $module;
+    }
+
+    /**
      * 设置值
      *
      * @author Farmer

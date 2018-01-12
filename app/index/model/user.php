@@ -14,7 +14,7 @@ namespace app\index\model;
 
 use icf\lib\db;
 
-class userModel {
+class user {
     private $user = [];
 
     public function __construct($uid) {

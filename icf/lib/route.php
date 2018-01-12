@@ -78,20 +78,15 @@ class route {
         if ($count <= 0) {
             return false;
         }
-        $mca = explode('->', self::$replace_param);
-        if (sizeof($mca) == 1) {
-            self::$module = _get(_config('module_key'), __DEFAULT_MODULE_);
-            self::$ctrl = _get(_config('ctrl_key'), 'index');
-            self::$action = _get(_config('action_key'), $mca[0]);
-        } else if (sizeof($mca) == 2) {
-            self::$module = _get(_config('module_key'), __DEFAULT_MODULE_);
-            self::$ctrl = _get(_config('ctrl_key'), $mca[0]);
-            self::$action = _get(_config('action_key'), $mca[1]);
-        } else if (sizeof($mca) == 3) {
-            self::$module = _get(_config('module_key'), $mca[0]);
-            self::$ctrl = _get(_config('ctrl_key'), $mca[1]);
-            self::$action = _get(_config('action_key'), $mca[2]);
+        $mca = explode('->', self::$replace_param, 3);
+        if (sizeof($mca) <= 2) {
+            $mca[2] = $mca[isset($mca[1])];
+            $mca[1] = isset($mca[1]) ? $mca[0] : 'index';
+            $mca[0] = __DEFAULT_MODULE_;
         }
+        self::$module = _get(_config('module_key'), $mca[0]);
+        self::$ctrl = _get(_config('ctrl_key'), $mca[1]);
+        self::$action = _get(_config('action_key'), $mca[2]);
         self::$classNamePace = 'app\\' . self::$module . '\\ctrl\\' . self::$ctrl;
         $className = str_replace('\\', '/', self::$classNamePace);
         if (!is_file($className . '.php')) {
@@ -194,7 +189,7 @@ class route {
                 if ($val = _get($value->getName())) {
                     $param [] = $val;
                 } else {
-                    $param [] =  $value->isDefaultValueAvailable() ? $value->getDefaultValue() : '';
+                    $param [] = $value->isDefaultValueAvailable() ? $value->getDefaultValue() : '';
                 }
             }
             $data = call_user_func_array([
