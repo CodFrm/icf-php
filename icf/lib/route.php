@@ -117,7 +117,7 @@ class route {
      */
     static function analyze() {
         self::$req_method = strtolower($_SERVER['REQUEST_METHOD']);
-        if (isset($_SERVER['PATH_INFO'])) {
+        if (isset($_SERVER['PATH_INFO']) && !empty($_SERVER['PATH_INFO'])) {
             $pathInfo = $_SERVER['PATH_INFO'];
             if (isset(self::$rule[self::$req_method])) {
                 $tmpRule = self::$rule[self::$req_method];
