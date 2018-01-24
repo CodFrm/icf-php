@@ -33,6 +33,10 @@ class loader {
         $rootPath = substr($className, 0, strpos($className, '/'));
         $loadFile = __ROOT_ . '/' . (isset(loader::$path[$rootPath]) ? loader::$path[$rootPath] : $rootPath);
         $loadFile .= substr($className, strpos($className, '/')) . '.php';
+        if (!is_file($loadFile)) {
+            $loadFile = __ROOT_ . '/icf/lib/' . (isset(loader::$path[$rootPath]) ? loader::$path[$rootPath] : $rootPath);
+            $loadFile .= substr($className, strpos($className, '/')) . '.php';
+        }
         if (is_file($loadFile)) {
             require_once $loadFile;
         }
