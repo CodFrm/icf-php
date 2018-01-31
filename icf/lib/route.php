@@ -172,6 +172,11 @@ class route {
             require_once $comPath . 'common.php';
         }
         try {
+            input('get', $_GET);
+            if (sizeof($_POST) <= 0) {
+                parse_str(file_get_contents('php://input'), $_POST);
+            }
+            input('post', $_POST);
             $tmp = self::$classNamePace;
             $object = new $tmp();
             if (input('config.rest')) {
