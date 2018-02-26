@@ -324,7 +324,7 @@ class query {
     /**
      * 上一个插入id
      * @author Farmer
-     * @return string
+     * @return int
      */
     public function lastinsertid() {
         return self::$db->lastInsertId();

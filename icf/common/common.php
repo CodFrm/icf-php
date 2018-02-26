@@ -12,11 +12,11 @@
  * Json 编码 对于中文处理 仅支持php5.4以后的版本
  *
  * @author Farmer
- * @param string $str
+ * @param array $arr
  * @return string
  */
-function json($str) {
-    return json_encode($str, JSON_UNESCAPED_UNICODE);
+function json($arr) {
+    return json_encode($arr, JSON_UNESCAPED_UNICODE);
 }
 
 
