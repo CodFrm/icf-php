@@ -64,7 +64,7 @@ class http {
 
     public function post($url = '', $data = '') {
         curl_setopt($this->curl, CURLOPT_POST, 1);
-        if (!empty($url)) {
+        if (!empty($data)) {
             $this->setUrl($url);
             curl_setopt($this->curl, CURLOPT_POSTFIELDS, $data);
         } else {
