@@ -24,8 +24,9 @@ class query {
             self::$db->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
             self::$db->setAttribute(PDO::ATTR_EMULATE_PREPARES, false);
         }
-        //处理表前缀
-        $this->table = input('config.db.prefix') . str_replace('|', ',' . input('config.db.prefix'), $table);
+        if (!empty($table)) {
+            $this->table = input('config.db.prefix') . str_replace('|', ',' . input('config.db.prefix'), $table);
+        }
     }
 
     private $table = '';

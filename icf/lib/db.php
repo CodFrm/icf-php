@@ -30,4 +30,28 @@ class db {
     public static function lastinsertid() {
         return (new query(''))->lastinsertid();
     }
+
+    /**
+     * 开始事务
+     * @author Farmer
+     */
+    public static function begin() {
+        (new query(''))->begin();
+    }
+
+    /**
+     * 提交事务
+     * @author Farmer
+     */
+    public static function commit() {
+        (new query(''))->commit();
+    }
+
+    /**
+     * 回滚事务
+     * @author Farmer
+     */
+    public static function rollback() {
+        (new query(''))->rollback();
+    }
 }
