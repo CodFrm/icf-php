@@ -19,7 +19,7 @@ class check {
     //默认规则
 
     public function rule($key, $rule = null) {
-        if (empty($rule)) {
+        if (is_null($rule)) {
             $this->checkRule = array_merge($this->checkRule, $key);
         } else {
             $this->checkRule[$key] = $rule;
@@ -28,7 +28,7 @@ class check {
     }
 
     public function addData($key, $value = null) {
-        if (empty($value)) {
+        if (is_null($value)) {
             $this->checkData = array_merge($this->checkData, $key);
         } else {
             $this->checkData[$key] = $value;
@@ -64,14 +64,18 @@ class check {
                 return $name . '不能为空';
             }
         }
-        if (isset($rule['func']) && is_array($rule['func'])) {
-            $paramName = $rule['func'];
-            $funName = $rule['func'][0];
+        if (isset($rule['func'])) {
             $parameter = array();
-            unset($paramName[0]);
             $parameter[] = $this->checkData[$key];
-            foreach ($paramName as $v) {
-                $parameter[] = $this->checkData[$v];
+            if (is_array($rule['func'])) {
+                $paramName = $rule['func'];
+                $funName = $rule['func'][0];
+                unset($paramName[0]);
+                foreach ($paramName as $v) {
+                    $parameter[] = $this->checkData[$v];
+                }
+            } else {
+                $funName = $rule['func'];
             }
             $tmpValue = call_user_func_array($funName, $parameter);
             if ($tmpValue !== true) {
@@ -93,15 +97,15 @@ class check {
         if (isset($rule['range'])) {
             $min = 0;
             if (is_array($rule['range'])) {
-                if (is_numeric($this->checkData[$key])) {
-                    $len = $this->checkData[$key];
-                } else if (is_string($this->checkData[$key])) {
-                    $len = strlen($this->checkData[$key]);
-                }
                 $min = $rule['range'][0];
                 $max = $rule['range'][1];
             } else {
-                $max = $rule;
+                $max = $rule['range'];
+            }
+            if (is_numeric($this->checkData[$key])) {
+                $len = $this->checkData[$key];
+            } else if (is_string($this->checkData[$key])) {
+                $len = mb_strlen($this->checkData[$key]);
             }
             if ($len < $min) {
                 return "{$name}长度过小,要求在($min-$max)之内";

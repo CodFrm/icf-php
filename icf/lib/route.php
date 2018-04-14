@@ -173,8 +173,18 @@ class route {
         }
         try {
             input('get', $_GET);
-            if (sizeof($_POST) <= 0) {
-                parse_str(file_get_contents('php://input'), $_POST);
+            if ($_SERVER['REQUEST_METHOD'] != 'GET') {
+                $input = file_get_contents('php://input');
+                if (sizeof($_POST) <= 0 && $input != '') {
+                    if (strpos(isset($_SERVER['CONTENT_TYPE']) ? $_SERVER['CONTENT_TYPE'] : '', 'application/json') !== false) {
+                        $_POST = json_decode($input, true);
+                        if (!$_POST || sizeof($_POST) <= 0) {
+                            parse_str($input, $_POST);
+                        }
+                    } else {
+                        parse_str($input, $_POST);
+                    }
+                }
             }
             input('post', $_POST);
             $tmp = self::$classNamePace;
@@ -207,7 +217,7 @@ class route {
             } else {
                 echo $data;
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             if (input('config.debug')) {
                 if (input('config.log')) {
                     index::$log->error('[file] ' . $e->getFile() . ' [line] ' . $e->getLine() . ' [error] ' . $e->getMessage());

@@ -10,6 +10,7 @@
 
 namespace icf\lib\db;
 
+use icf\lib\db;
 use PDO;
 
 class query {
@@ -283,7 +284,7 @@ class query {
      * @author Farmer
      */
     public function begin() {
-        $this->exec('begin');
+        self::$db->exec('begin');
     }
 
     /**
@@ -291,7 +292,7 @@ class query {
      * @author Farmer
      */
     public function commit() {
-        $this->exec('commit');
+        self::$db->exec('commit');
     }
 
     /**
@@ -299,7 +300,7 @@ class query {
      * @author Farmer
      */
     public function rollback() {
-        $this->exec('rollback');
+        self::$db->exec('rollback');
     }
 
     public function field($field, $alias = '') {
@@ -311,12 +312,11 @@ class query {
             }
         } else if (is_array($field)) {
             foreach ($field as $key => $value) {
-                if (is_array($value)) {
+                if (is_string($key)) {
                     $this->field .= (empty($this->field) ? '' : ',') . $key . ' as ' . $value . ' ';
-                } else if (is_string($value)) {
+                } else {
                     $this->field .= (empty($this->field) ? '' : ',') . $value . ' ';
                 }
-
             }
         }
         return $this;

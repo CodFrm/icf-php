@@ -20,8 +20,20 @@ class HttpHelp {
         header(self::$httpVersion . " " . $statusCode . " " . $statusMessage);
     }
 
-    public static function setContentType($contentType = 'text/html') {
-        header('Content-Type:' . $contentType . '; charset=utf-8');
+    private static $contentType = [
+        'html' => 'text/html', 'json' => 'application/json', 'jpg' => 'image/jpeg',
+        'png' => 'image/png', 'gif' => 'image/gif', 'xml' => 'text/xml'
+    ];
+
+    public static function setContentType($type = 'html') {
+        header('Content-Type:' . self::$contentType[$type] . '; charset=utf-8');
+    }
+
+    public static function getHeaderVal($key) {
+        if (isset($_SERVER['HTTP_' . strtoupper($key)])) {
+            return $_SERVER['HTTP_' . strtoupper($key)];
+        }
+        return false;
     }
 
     public static function getHttpStatusMessage($statusCode) {
